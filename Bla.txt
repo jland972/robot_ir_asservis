@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 Ligne 1 
 
 
 Ligne 3 
+=======
+>>>>>>> parent of c172896... test de modif Textuel
