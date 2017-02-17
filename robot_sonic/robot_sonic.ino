@@ -22,16 +22,43 @@ int d;
 /*
  * Fonction qui fait quoi ?
  */
-int distanceFunction(int val, int val2){
-  int result;
+int distanceFunction(){
+   i=analogRead(redpin);
+    val=(6762/(i-9))-4;
+
   
-  if (val<val2){ 
-    result=val;
-    }
-  else{
-    result=val2;
-    }
-  return result;
+  
+  
+  return val;
+}
+
+int mouvement(int d){
+  if (d<5) 
+ {
+  digitalWrite(motor1_in1Pin, HIGH);   
+  digitalWrite(motor1_in2Pin, LOW);  
+  digitalWrite(motor2_in1Pin, HIGH);   
+  digitalWrite(motor2_in2Pin, LOW);  
+ 
+ }
+ else if (d>5 and d<20)
+     {
+     digitalWrite(motor1_in1Pin, HIGH);   
+     digitalWrite(motor1_in2Pin, LOW);  
+     digitalWrite(motor2_in1Pin, LOW);   
+     digitalWrite(motor2_in2Pin, HIGH);  
+     }
+    
+     
+     else
+     {
+     digitalWrite(motor1_in1Pin, LOW);   
+     digitalWrite(motor1_in2Pin, HIGH);  
+     digitalWrite(motor2_in1Pin, LOW);   
+     digitalWrite(motor2_in2Pin, HIGH);  
+ }
+ 
+  
 }
 
 
@@ -59,44 +86,8 @@ void setup() {
 
 
 void loop() {
-  i=analogRead(redpin);
-    val=(6762/(i-9))-4;
-  j=analogRead(redpin2);
-    val2=(6762/(j-9))-4;
-  
-  d=distanceFunction(val,val2);
-  if (d<5) 
- {
-  digitalWrite(motor1_in1Pin, HIGH);   
-  digitalWrite(motor1_in2Pin, LOW);  
-  digitalWrite(motor2_in1Pin, HIGH);   
-  digitalWrite(motor2_in2Pin, LOW);  
- 
- }
- else if (d>5 and d<20)
-     {
-     digitalWrite(motor1_in1Pin, HIGH);   
-     digitalWrite(motor1_in2Pin, LOW);  
-     digitalWrite(motor2_in1Pin, LOW);   
-     digitalWrite(motor2_in2Pin, HIGH);  
-     }
-     /*
-     else
-     {
-     digitalWrite(motor1_in1Pin, LOW);   
-     digitalWrite(motor1_in2Pin, HIGH);  
-     digitalWrite(motor2_in1Pin, HIGH);   
-     digitalWrite(motor2_in2Pin, LOW);  
-     }
-     */
-     
-     else
-     {
-     digitalWrite(motor1_in1Pin, LOW);   
-     digitalWrite(motor1_in2Pin, HIGH);  
-     digitalWrite(motor2_in1Pin, LOW);   
-     digitalWrite(motor2_in2Pin, HIGH);  
- }
+    d=distanceFunction();
+    mouvement(d);
  
 }
     
