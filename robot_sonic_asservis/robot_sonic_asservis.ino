@@ -13,11 +13,12 @@ int motor2_in2Pin = 8;
 int codeuse1=4;
 int codeuse2=5;
 unsigned int tick_1=0;
+unsigned int tick=0;
 unsigned int tick_2=0;
 int cmd=0;
-const int frequence=50;
-float consigne_moteur_nombre_tours_par_seconde=2;
-float kp=0.5;
+const int frequence=100;
+float consigne=5;
+float kp=100; // essayer : 100 ou 300
 
 
 void compteur(){
@@ -27,15 +28,16 @@ void compteur(){
   }
   
 void asservissement(){
+  
   int frequence_codeuse=frequence*tick_1;
-  float nb_tour_par_sec=(float)frequence_codeuse/(float)40/(float)48;
-  float erreur =consigne_moteur_nombre_tours_par_seconde-nb_tour_par_sec;
+  float nb_tour_par_sec=frequence_codeuse/40/48;
+  float erreur =consigne-nb_tour_par_sec;
  
-  tick_1=0;
+  
   cmd=kp*erreur;
   if (cmd<0)cmd=0;
   else if (cmd>255)cmd=255;
-  analogWrite(motor1_enablePin,255-cmd);
+  analogWrite(motor1_enablePin,cmd);
   //Serial.println(tick_1);
    // DEBUG
     
@@ -44,6 +46,7 @@ void asservissement(){
     Serial.print(erreur,4);
     Serial.println();
     //*/
+    tick_1=0;
 }
 
 
@@ -61,7 +64,7 @@ void setup() {
   digitalWrite(motor1_in2Pin, LOW);  
   digitalWrite(motor2_in1Pin, HIGH);   
   digitalWrite(motor2_in2Pin, LOW);  
-  analogWrite(motor1_enablePin,255);
+  analogWrite(motor1_enablePin,0);
 
   // set enablePin high so that motor can turn on:
   
