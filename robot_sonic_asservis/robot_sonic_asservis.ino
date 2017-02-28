@@ -13,7 +13,6 @@ int motor2_in2Pin = 8;
 int codeuse1=4;
 int codeuse2=5;
 unsigned int tick_1=0;
-unsigned int tick=0;
 unsigned int tick_2=0;
 int cmd=0;
 const int frequence=50;
