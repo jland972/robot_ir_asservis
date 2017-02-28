@@ -16,7 +16,7 @@ unsigned int tick_1=0;
 unsigned int tick=0;
 unsigned int tick_2=0;
 int cmd=0;
-const int frequence=100;
+const int frequence=50;
 float consigne=5;
 float kp=100; // essayer : 100 ou 300
 
@@ -30,7 +30,7 @@ void compteur(){
 void asservissement(){
   
   int frequence_codeuse=frequence*tick_1;
-  float nb_tour_par_sec=frequence_codeuse/40/48;
+  float nb_tour_par_sec=frequence_codeuse/40;
   float erreur =consigne-nb_tour_par_sec;
  
   
