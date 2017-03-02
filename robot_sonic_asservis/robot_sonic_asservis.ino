@@ -7,7 +7,7 @@ const int motor1_enablePin = 3; //pwm
 int motor1_in1Pin = 11;
 int motor1_in2Pin = 12;
 
-int motor2_enablePin = 10; //pwm
+const int motor2_enablePin = 10; //pwm
 int motor2_in1Pin = 9;
 int motor2_in2Pin = 8;
 int codeuse1=4;
@@ -16,20 +16,20 @@ unsigned int tick_1=0;
 unsigned int tick_2=0;
 int cmd=0;
 const int frequence=50;
-float consigne=5;
-float kp=100; // essayer : 100 ou 300
+float consigne=10;
+float kp=250; // essayer : 100 ou 300
 
 
-void compteur(){
+void compteur (){
   tick_1++;
-  //tick_2++;  a faire 
+  tick_2++;  
  // Serial.println(tick_1);
   }
   
-void asservissement(){
+void asservissement1(){
   
   int frequence_codeuse=frequence*tick_1;
-  float nb_tour_par_sec=frequence_codeuse/40;
+  float nb_tour_par_sec=frequence_codeuse/20;
   float erreur =consigne-nb_tour_par_sec;
  
   
@@ -41,13 +41,33 @@ void asservissement(){
    // DEBUG
     
     Serial.print(nb_tour_par_sec,8);
-    Serial.print(" : ");
-    Serial.print(erreur,4);
-    Serial.println();
+   Serial.print(" : ");
+   // Serial.print(erreur,4);
+   // Serial.println();
     //*/
     tick_1=0;
 }
-
+void asservissement2(){
+  
+  int frequence_codeuse=frequence*tick_2;
+  float nb_tour_par_sec=frequence_codeuse/20;
+  float erreur =consigne-nb_tour_par_sec;
+ 
+  
+  cmd=kp*erreur;
+  if (cmd<0)cmd=0;
+  else if (cmd>255)cmd=255;
+  analogWrite(motor2_enablePin,cmd);
+  //Serial.println(tick_2);
+   // DEBUG
+    
+    Serial.print(nb_tour_par_sec,8);
+   // Serial.print(" : ");
+   // Serial.print(erreur,4);
+   // Serial.println();
+    //*/
+    tick_2=0;
+    }
 
 void setup() {
   Serial.begin(115200);
@@ -64,14 +84,14 @@ void setup() {
   digitalWrite(motor2_in1Pin, HIGH);   
   digitalWrite(motor2_in2Pin, LOW);  
   analogWrite(motor1_enablePin,0);
-
+  analogWrite(motor2_enablePin,0);
   // set enablePin high so that motor can turn on:
   
   
 delay(5000);
-attachInterrupt(codeuse1,compteur,CHANGE);
-timer.setInterval(1000/frequence,asservissement);
-
+attachInterrupt(codeuse1,compteur,RISING);
+timer.setInterval(1000/frequence,asservissement1);
+timer.setInterval(1000/frequence,asservissement2);
 }
 
 
