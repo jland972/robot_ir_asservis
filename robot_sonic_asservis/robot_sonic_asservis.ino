@@ -19,6 +19,48 @@ const int frequence=50;
 float consigne=10;
 float kp=250; // essayer : 100 ou 300
 
+int i;
+int j;
+int val;
+int val2;
+int redpin=0;
+int redpin2=1;
+int d;
+
+int distanceFunction(){
+   i=analogRead(redpin);
+    val=(6762/(i-9))-4; 
+  return val;
+}
+
+int mouvement(int d){
+  if (d<5) 
+ {
+  digitalWrite(motor1_in1Pin, HIGH);   
+  digitalWrite(motor1_in2Pin, LOW);  
+  digitalWrite(motor2_in1Pin, HIGH);   
+  digitalWrite(motor2_in2Pin, LOW);  
+ 
+ }
+ else if (d>5 and d<20)
+     {
+     digitalWrite(motor1_in1Pin, HIGH);   
+     digitalWrite(motor1_in2Pin, LOW);  
+     digitalWrite(motor2_in1Pin, LOW);   
+     digitalWrite(motor2_in2Pin, HIGH);  
+     }
+    
+     
+     else
+     {
+     digitalWrite(motor1_in1Pin, LOW);   
+     digitalWrite(motor1_in2Pin, HIGH);  
+     digitalWrite(motor2_in1Pin, LOW);   
+     digitalWrite(motor2_in2Pin, HIGH);  
+ }
+ 
+  
+}
 
 void compteur (){
   tick_1++;
@@ -97,5 +139,8 @@ timer.setInterval(1000/frequence,asservissement2);
 
 void loop() {
   timer.run();
+   d=distanceFunction();
+    mouvement(d);
+ 
   delay(10);
 }
