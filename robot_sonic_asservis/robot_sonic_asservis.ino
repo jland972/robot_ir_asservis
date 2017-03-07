@@ -17,33 +17,64 @@ unsigned int tick_2=0;
 int cmd1=0;
 int cmd2=0;
 const int frequence=50;
-float consigne=15;
-float kp1=150;
-float kp2=150;// essayer : 100 ou 300
+float consigne=30;
+float kp1=250;
+float kp2=250;// essayer : 100 ou 300
 float ki1=2;
 float ki2=2;
-float kd1=300;
-float kd2=300;
+float kd1=600;
+float kd2=600;
 float somme_erreur = 0;
 float delta_erreur=0;
 float erreur_precedente=0;
 
 int i;
 int j;
+int k;
 int val;
 int val2;
+int val3;
 int redpin=0;
 int redpin2=1;
+int redpin3=2;
 int d;
+int e;
+int f;
 
-int distanceFunction(){
+
+int trig=?
+int echo=?
+long lecture_echo;
+long cm;
+int g;
+
+
+int distanceFunction1(){
    i=analogRead(redpin);
     val=(6762/(i-9))-4; 
   return val;
 }
+int distanceFunction2(){
+   j=analogRead(redpin2);
+    val2=(6762/(j-9))-4;
+  return val2;
+    }
+int distanceFunction3(){
+   k=analogRead(redpin3);
+    val3=(6762/(k-9))-4;
+  return val3;
+}
 
-int mouvement(int d){
-  if (d<5) 
+int sonarFunction(){
+  digitalWrite(trig,HIGH);
+  delayMicroseconds(10)
+  digitalWrite(trig,LOW);
+  lecture_echo=pulseIn(echo,HIGH);
+  cm=lecture_echo/58;
+  return cm;
+}
+int mouvement(int d, int e, int f){
+  if (d<5)or(g<5)
  {
   digitalWrite(motor1_in1Pin, HIGH);   
   digitalWrite(motor1_in2Pin, LOW);  
@@ -51,14 +82,21 @@ int mouvement(int d){
   digitalWrite(motor2_in2Pin, LOW);  
  
  }
- else if (d>5 and d<20)
-     {
+else if (d>5 and g>5){
+  if (d>5 and d<20)or (g>5 and g<20)
+     { if (f>e){
      digitalWrite(motor1_in1Pin, HIGH);   
      digitalWrite(motor1_in2Pin, LOW);  
      digitalWrite(motor2_in1Pin, LOW);   
      digitalWrite(motor2_in2Pin, HIGH);  
      }
-    
+     else{
+     digitalWrite(motor1_in1Pin, LOW);   
+     digitalWrite(motor1_in2Pin, HIGH);  
+     digitalWrite(motor2_in1Pin, HIGH);   
+     digitalWrite(motor2_in2Pin, LOW);
+     }
+     }}
      
      else
      {
@@ -134,6 +172,9 @@ void setup() {
   pinMode(motor2_in1Pin, OUTPUT);
   pinMode(motor2_in2Pin, OUTPUT);
   pinMode(motor2_enablePin, OUTPUT);
+  pinMode(trig,OUTPUT);
+  pinMode(echo,INPUT);
+ 
  
    digitalWrite(motor1_in1Pin, HIGH);   
   digitalWrite(motor1_in2Pin, LOW);  
@@ -141,7 +182,11 @@ void setup() {
   digitalWrite(motor2_in2Pin, LOW);  
   analogWrite(motor1_enablePin,0);
   analogWrite(motor2_enablePin,0);
-  // set enablePin high so that motor can turn on:
+
+  digitalWrite(trig,LOW);
+  
+  
+  
   
   
 delay(5000);
@@ -153,8 +198,11 @@ timer.setInterval(1000/frequence,asservissement2);
 
 void loop() {
   timer.run();
-  // d=distanceFunction();
-   // mouvement(d);
+  d=distanceFunction1();
+  e=distanceFunction2();
+  f=distanceFunction3();
+  g=sonarFunction
+   mouvement(d,e,f,g);
  
   delay(10);
 }
