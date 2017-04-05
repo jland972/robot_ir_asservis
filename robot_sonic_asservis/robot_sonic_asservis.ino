@@ -11,7 +11,7 @@ const int motor2_enablePin = 10; //pwm
 int motor2_in1Pin = 9;
 int motor2_in2Pin = 8;
 int codeuse1=4;
-int codeuse2=5;
+int codeuse2=6;
 unsigned int tick_1=0;
 unsigned int tick_2=0;
 int cmd1=0;
@@ -31,23 +31,20 @@ float erreur_precedente=0;
 int i;
 int j;
 int k;
+int l;
 int val;
 int val2;
 int val3;
+int val4;
 int redpin=0;
 int redpin2=1;
 int redpin3=2;
+int redpin4=3;
 int d;
 int e;
 int f;
-
-
-int trig=?
-int echo=?
-long lecture_echo;
-long cm;
 int g;
-
+int var;
 
 int distanceFunction1(){
    i=analogRead(redpin);
@@ -64,31 +61,43 @@ int distanceFunction3(){
     val3=(6762/(k-9))-4;
   return val3;
 }
+int distanceFunction4(){
+   l=analogRead(redpin4);
+    val4=(6762/(l-9))-4;
+  return val4;
 
-int sonarFunction(){
-  digitalWrite(trig,HIGH);
-  delayMicroseconds(10)
-  digitalWrite(trig,LOW);
-  lecture_echo=pulseIn(echo,HIGH);
-  cm=lecture_echo/58;
-  return cm;
 }
-int mouvement(int d, int e, int f){
-  if (d<5)or(g<5)
- {
-  digitalWrite(motor1_in1Pin, HIGH);   
-  digitalWrite(motor1_in2Pin, LOW);  
-  digitalWrite(motor2_in1Pin, HIGH);   
-  digitalWrite(motor2_in2Pin, LOW);  
+
+
+int mouvement(int d, int e, int f,int g){
  
- }
-else if (d>5 and g>5){
-  if (d>5 and d<20)or (g>5 and g<20)
-     { if (f>e){
+  if (d<5)
+ {
      digitalWrite(motor1_in1Pin, HIGH);   
      digitalWrite(motor1_in2Pin, LOW);  
+     digitalWrite(motor2_in1Pin, HIGH);   
+     digitalWrite(motor2_in2Pin, LOW); 
+ }
+  else if (g<5){
+     digitalWrite(motor1_in1Pin, HIGH);   
+     digitalWrite(motor1_in2Pin, LOW);  
+     digitalWrite(motor2_in1Pin, HIGH);   
+     digitalWrite(motor2_in2Pin, LOW); 
+ }
+ else if (d<5 and g<5){
+     digitalWrite(motor1_in1Pin, HIGH);   
+     digitalWrite(motor1_in2Pin, LOW);  
+     digitalWrite(motor2_in1Pin, HIGH);   
+     digitalWrite(motor2_in2Pin, LOW); 
+ }
+ else{
+  
+   if (d<20)
+     { if (f>e){
+      digitalWrite(motor1_in1Pin, HIGH);   
+     digitalWrite(motor1_in2Pin, LOW);  
      digitalWrite(motor2_in1Pin, LOW);   
-     digitalWrite(motor2_in2Pin, HIGH);  
+     digitalWrite(motor2_in2Pin, HIGH);
      }
      else{
      digitalWrite(motor1_in1Pin, LOW);   
@@ -96,19 +105,38 @@ else if (d>5 and g>5){
      digitalWrite(motor2_in1Pin, HIGH);   
      digitalWrite(motor2_in2Pin, LOW);
      }
-     }}
+     
+     }
+    else if (g<20){ 
+      
+      if (f>e){
+     
+     digitalWrite(motor1_in1Pin, HIGH);   
+     digitalWrite(motor1_in2Pin, LOW);  
+     digitalWrite(motor2_in1Pin, LOW);   
+     digitalWrite(motor2_in2Pin, HIGH);
+     }
+     else{
+      digitalWrite(motor1_in1Pin, LOW);   
+     digitalWrite(motor1_in2Pin, HIGH);  
+     digitalWrite(motor2_in1Pin, HIGH);   
+     digitalWrite(motor2_in2Pin, LOW);
+     }
+     
+     }
      
      else
-     {
+     { 
      digitalWrite(motor1_in1Pin, LOW);   
      digitalWrite(motor1_in2Pin, HIGH);  
      digitalWrite(motor2_in1Pin, LOW);   
      digitalWrite(motor2_in2Pin, HIGH);  
+     
  }
  
   
 }
-
+}
 void compteur (){
   tick_1++;
   tick_2++;  
@@ -172,18 +200,13 @@ void setup() {
   pinMode(motor2_in1Pin, OUTPUT);
   pinMode(motor2_in2Pin, OUTPUT);
   pinMode(motor2_enablePin, OUTPUT);
-  pinMode(trig,OUTPUT);
-  pinMode(echo,INPUT);
  
  
-   digitalWrite(motor1_in1Pin, HIGH);   
-  digitalWrite(motor1_in2Pin, LOW);  
-  digitalWrite(motor2_in1Pin, HIGH);   
-  digitalWrite(motor2_in2Pin, LOW);  
+ 
   analogWrite(motor1_enablePin,0);
   analogWrite(motor2_enablePin,0);
 
-  digitalWrite(trig,LOW);
+  
   
   
   
@@ -193,16 +216,16 @@ delay(5000);
 attachInterrupt(codeuse1,compteur,RISING);
 timer.setInterval(1000/frequence,asservissement1);
 timer.setInterval(1000/frequence,asservissement2);
-}
 
+}
 
 void loop() {
   timer.run();
   d=distanceFunction1();
   e=distanceFunction2();
   f=distanceFunction3();
-  g=sonarFunction
-   mouvement(d,e,f,g);
+  g=distanceFunction4();
+ mouvement(d,e,f,g);
  
   delay(10);
 }
